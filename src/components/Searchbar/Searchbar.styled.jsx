@@ -34,7 +34,10 @@ export const SearchFormInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  width: 300px;
+  width: 200px;
+  @media screen and (min-width: 530px) {
+    width: 340px;
+  }
   &:focus {
     border-color: #4caf50;
     outline: none;
