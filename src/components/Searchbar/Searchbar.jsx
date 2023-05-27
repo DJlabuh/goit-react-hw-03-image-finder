@@ -15,7 +15,7 @@ export class Searchbar extends Component {
   };
 
   handleChange = ({ target: { value } }) => {
-    this.setState({ value });
+    this.setState({ value: value.trim() });
   };
 
   handleSubmit = e => {
