@@ -18,7 +18,14 @@ export const getImages = async (searchText, page) => {
       },
     });
 
-    return response.data;
+    const hits = response.data.hits.map(item => ({
+      id: item.id,
+      tags: item.tags,
+      webformatURL: item.webformatURL,
+      largeImageURL: item.largeImageURL,
+    }));
+
+    return { ...response.data, hits };
   } catch (error) {
     throw new Error(error.message);
   }
