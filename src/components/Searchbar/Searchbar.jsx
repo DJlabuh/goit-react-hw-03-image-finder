@@ -15,14 +15,14 @@ export class Searchbar extends Component {
   };
 
   handleChange = ({ target: { value } }) => {
-    this.setState({ value: value.trim() });
-  };
+  this.setState({ value: value });
+};
 
   handleSubmit = e => {
-    e.preventDefault();
-    this.props.handleSearch(this.state.value);
-    this.setState({ value: '' });
-  };
+  e.preventDefault();
+  this.props.handleSearch(this.state.value);
+  this.setState({ value: '' });
+};
 
   render() {
     return (

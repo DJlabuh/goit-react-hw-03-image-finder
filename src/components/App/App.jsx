@@ -18,29 +18,38 @@ export class App extends Component {
     maxPage: null,
   };
 
-  handleSearch = async searchText => {
-    this.setState({ isLoading: true, searchText, page: 1 });
-
-    try {
-      await this.performSearch(searchText, 1);
-    } catch (error) {
-      toast.error(`Error: ${error}`);
-    } finally {
-      this.setState({ isLoading: false });
+  componentDidMount() {
+    if (this.state.searchText !== '') {
+      this.performSearch();
     }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.searchText !== this.state.searchText) {
+      this.performSearch();
+    }
+  }
+
+  handleSearch = searchText => {
+    if (searchText.trim() === '') {
+      toast.warn('Please enter a search term.');
+      return;
+    }
+
+    this.setState({ isLoading: true, searchText, page: 1 });
   };
 
   loadMoreImages = async () => {
     this.setState({ isLoading: true });
 
     try {
-      const { searchText, page, maxPage } = this.state;
+      const { page, maxPage } = this.state;
       const nextPage = page + 1;
 
       if (nextPage > maxPage) {
         toast.info('No more images to load...');
       } else {
-        await this.performSearch(searchText, nextPage);
+        await this.performSearch(nextPage);
       }
     } catch (error) {
       toast.error(`Error: ${error}`);
@@ -49,18 +58,26 @@ export class App extends Component {
     }
   };
 
-  performSearch = async (searchText, page) => {
-    const data = await getImages(searchText, page);
+  performSearch = async (page = 1) => {
+    const { searchText } = this.state;
 
-    if (data.hits.length === 0) {
-      toast.error('Sorry, there are no images matching your query!');
+    try {
+      const data = await getImages(searchText, page);
+
+      if (data.hits.length === 0) {
+        toast.error('Sorry, there are no images matching your query!');
+      }
+
+      this.setState(prevState => ({
+        data: page === 1 ? data.hits : [...prevState.data, ...data.hits],
+        maxPage: Math.ceil(data.totalHits / 12),
+        page,
+      }));
+    } catch (error) {
+      toast.error(`Error: ${error}`);
+    } finally {
+      this.setState({ isLoading: false });
     }
-
-    this.setState({
-      data: page === 1 ? data.hits : [...this.state.data, ...data.hits],
-      maxPage: Math.ceil(data.totalHits / 12),
-      page,
-    });
   };
 
   render() {
