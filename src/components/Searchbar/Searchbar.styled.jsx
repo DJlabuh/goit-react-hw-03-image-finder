@@ -33,9 +33,10 @@ export const SearchFormInput = styled.input`
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
   width: 200px;
   @media screen and (min-width: 530px) {
+    font-size: 14px;
     width: 340px;
   }
   &:focus {

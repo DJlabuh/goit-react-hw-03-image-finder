@@ -1,4 +1,8 @@
 import { Component } from 'react';
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import PropTypes from 'prop-types';
 
 import {
@@ -15,14 +19,23 @@ export class Searchbar extends Component {
   };
 
   handleChange = ({ target: { value } }) => {
-  this.setState({ value: value });
-};
+    this.setState({ value: value });
+  };
 
   handleSubmit = e => {
-  e.preventDefault();
-  this.props.handleSearch(this.state.value);
-  this.setState({ value: '' });
-};
+    e.preventDefault();
+
+    const { value } = this.state;
+    const { handleSearch } = this.props;
+
+    if (value.trim() === '') {
+      toast.warn('Please enter a search term.');
+      return;
+    }
+
+    handleSearch(value);
+    this.setState({ value: '' });
+  };
 
   render() {
     return (
@@ -34,7 +47,7 @@ export class Searchbar extends Component {
 
           <SearchFormInput
             type="search"
-            autocomplete="off"
+            autoСomplete="off"
             autoFocus
             placeholder="Search images and photos"
             onChange={this.handleChange}
