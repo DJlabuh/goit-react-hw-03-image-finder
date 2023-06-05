@@ -24,7 +24,7 @@ export class App extends Component {
       prevState.page !== this.state.page
     ) {
       this.setState({ isLoading: true }, () => {
-        this.performSearch(this.state.page);
+        this.performSearch();
       });
     }
   }
@@ -37,14 +37,15 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-  performSearch = async (page = 1) => {
-    const { searchText } = this.state;
+  performSearch = async () => {
+    const { searchText, page } = this.state;
 
     try {
       const data = await getImages(searchText, page);
 
       if (data.hits.length === 0) {
         toast.error('Sorry, there are no images matching your query!');
+        return;
       }
 
       this.setState(prevState => ({
@@ -59,7 +60,7 @@ export class App extends Component {
   };
 
   render() {
-    const { searchText, data, isLoading, page, maxPage } = this.state;
+    const { data, isLoading, page, maxPage } = this.state;
     const showLoadMoreButton = data && data.length > 0 && page < maxPage;
 
     return (
@@ -68,7 +69,7 @@ export class App extends Component {
         <section>
           {isLoading && <Loader />}
           <ToastContainer autoClose={2000} />
-          <ImageGallery searchText={searchText} data={data} />
+          {data.length > 0 && <ImageGallery data={data} />}
           {showLoadMoreButton && <Button onClick={this.loadMoreImages} />}
         </section>
       </>

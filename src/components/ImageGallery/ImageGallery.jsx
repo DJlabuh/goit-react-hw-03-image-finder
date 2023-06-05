@@ -9,7 +9,9 @@ export function ImageGallery(props) {
   return (
     <>
       <GalleryList>
-        {data && data.map(img => <ImageGalleryItem image={img} key={img.id} />)}
+        {data.map(img => (
+          <ImageGalleryItem image={img} key={img.id} />
+        ))}
       </GalleryList>
     </>
   );
