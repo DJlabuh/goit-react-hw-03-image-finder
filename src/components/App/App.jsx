@@ -30,11 +30,6 @@ export class App extends Component {
   }
 
   handleSearch = searchText => {
-    if (searchText.trim() === '') {
-      toast.warn('Please enter a search term.');
-      return;
-    }
-
     this.setState({ searchText, page: 1, data: [] });
   };
 
