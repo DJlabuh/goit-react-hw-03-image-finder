@@ -23,9 +23,9 @@ export class App extends Component {
       prevState.searchText !== this.state.searchText ||
       prevState.page !== this.state.page
     ) {
-      this.setState({ isLoading: true });
-
-      this.performSearch();
+      this.setState({ isLoading: true }, () => {
+        this.performSearch(this.state.page);
+      });
     }
   }
 
